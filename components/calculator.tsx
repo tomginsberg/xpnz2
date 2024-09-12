@@ -108,7 +108,7 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
         'Backspace': 'destructive',
     }
 
-    // @ts-ignore
+    // @ts-expect-error
     return (
         <div className="w-full max-w-md mx-auto p-4 rounded-lg">
             <Input
