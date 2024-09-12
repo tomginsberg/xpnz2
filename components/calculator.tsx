@@ -98,7 +98,7 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
         '(', ')', 'Enter', 'Backspace'
     ]
 
-    const buttonVariants = {
+    const buttonVariants: { [key: string]: string } = {
         '/': 'secondary',
         '×': 'secondary',
         '-': 'secondary',
@@ -108,6 +108,7 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
         'Backspace': 'destructive',
     }
 
+    // @ts-ignore
     return (
         <div className="w-full max-w-md mx-auto p-4 rounded-lg">
             <Input
