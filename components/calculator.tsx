@@ -108,7 +108,7 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
         'Backspace': 'destructive',
     }
 
-    // @ts-expect-error
+    // @ts-expect-error - TS doesn't know if the value is a key of buttonVariants
     return (
         <div className="w-full max-w-md mx-auto p-4 rounded-lg">
             <Input
