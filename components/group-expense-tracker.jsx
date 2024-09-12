@@ -76,7 +76,6 @@ export default function Component() {
     const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false)
     const [calendarOpen, setIsCalendarOpen] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false)
-    const [isCurrencyPopoverOpen, setIsCurrencyPopoverOpen] = useState(false)
 
     const categories = [
         "🚰 Utilities",
