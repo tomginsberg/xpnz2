@@ -13,13 +13,15 @@ import TopBar from './topbar';
 import {Button} from './ui/button';
 import {Calendar} from './ui/calendar';
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from './ui/command';
-import {Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle} from './ui/drawer';
+import {Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger} from './ui/drawer';
 import {Input} from './ui/input';
 import {Label} from './ui/label';
 import {Popover, PopoverContent, PopoverTrigger} from './ui/popover';
 import {ScrollArea} from './ui/scroll-area';
 import ExpensesTab from "./expenses";
 import {Check, ChevronsUpDown} from "lucide-react"
+import CalculatorInput from "./calculator-input";
+import HoldToDelete from "./delete";
 
 import {
     Select,
@@ -30,7 +32,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { MultiSelect } from "@/components/ui/multi-select";
+import {MultiSelect} from "@/components/ui/multi-select";
 
 import {
     Dialog,
@@ -41,6 +43,17 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
+import {SheetClose} from "./ui/sheet";
+
 
 const generateRandomExpense = () => {
     const expenseNames = ["Dinner and a Movie on a Boat", "Movie", "Groceries", "Utilities", "Rent", "Travel", ""]
@@ -84,7 +97,58 @@ export default function Component() {
     const [isEditMode, setIsEditMode] = useState(false)
     const [isCurrencyPopoverOpen, setIsCurrencyPopoverOpen] = useState(false)
 
-    const categories = ["🍕 Food", "🎥 Entertainment", "🏠 Housing", "🚂 Transportation", "🚰 Utilities"]
+    const categories = [
+        "🚰 Utilities",
+        "🛒 Groceries",
+        "🏠 Rent",
+        "🚗 Auto",
+        "💳 Subscriptions",
+        "🛍️ Shopping",
+        "🏥 Health",
+        "🍽️ Dining",
+        "🚌 Transit",
+        "🎉 Entertainment",
+        "🏋️ Fitness",
+        "📚 Education",
+        "🐾 Pets",
+        "🎁 Gifts",
+        "🧹 Household",
+        "💻 Internet",
+        "📱 Phone",
+        "🛫 Travel",
+        "🍷 Alcohol",
+        "🧴 Personal Care",
+        "💡 Electricity",
+        "🌊 Water",
+        "🚿 Gas",
+        "🌐 Cable",
+        "📉 Investments",
+        "🛡️ Insurance",
+        "📬 Postal",
+        "🧾 Taxes",
+        "👶 Childcare",
+        "🎓 Tuition",
+        "🧰 Maintenance",
+        "🎨 Crafts",
+        "📸 Photography",
+        "🎠 Hobbies",
+        "🚸 School Supplies",
+        "🧢 Sportswear",
+        "⚽ Sports",
+        "👟 Footwear",
+        "🔧 Tools",
+        "💊 Supplements",
+        "💒 Donations",
+        "❓ Misc",
+        "🖥️ Tech",
+        "📖 Books",
+        "🧽 Cleaning",
+        "🚪 Home Improvement",
+        "🏛️ Museums",
+        "🎸 Music Instruments",
+        "🎭 Theater",
+        "🚬 Tobacco"
+    ];
     const members = ['Alice', 'Bob', 'Charlie', 'David', 'Eve']
     const currencies = {
         CAD: '🇨🇦 CAD',
@@ -215,40 +279,44 @@ export default function Component() {
                             </div>
 
                             <div className="flex items-center gap-2">
-                            <div className="flex-1 space-y-2">
-                                <Label htmlFor="amount">Amount</Label>
-                                <div className="relative">
-                                    <Banknote
-                                        className="size-5 absolute left-3 top-1/2 mt-[1px] transform -translate-y-1/2"/>
-                                    <Input
-                                        id="amount" type="number"
-                                        placeholder="0.00"
-                                        onChange={handleInputChange}
+                                <div className="flex-1 space-y-2">
+                                    <CalculatorInput
                                         value={selectedExpense.amount}
-                                        className="pl-10"
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                e.preventDefault()
-                                                e.target.blur();
-                                            }
-                                        }}
+                                        onChange={(value) => setSelectedExpense(prev => ({...prev, amount: value}))}
+                                        disabled={false}
                                     />
-                                </div>
-                            </div>
+                                    {/*<Label htmlFor="amount">Amount</Label>*/}
 
-                            <div className="w-24 space-y-2">
-                                <Label htmlFor="currency">Currency</Label>
-                                <Select>
-                                <SelectTrigger id="currency">
-                                    <SelectValue placeholder={currencies['CAD']} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {Object.entries(currencies).map(([code, flag]) => (
-    <SelectItem key={code} value={code}>{flag}</SelectItem>
-))}
-                                </SelectContent>
-                            </Select>
-                            </div>
+                                    {/*<Input*/}
+                                    {/*    id="amount" type="number"*/}
+                                    {/*    placeholder="0.00"*/}
+                                    {/*    onChange={handleInputChange}*/}
+                                    {/*    value={selectedExpense.amount}*/}
+                                    {/*    className="pl-10"*/}
+                                    {/*    onKeyDown={(e) => {*/}
+                                    {/*        if (e.key === 'Enter') {*/}
+                                    {/*            e.preventDefault()*/}
+                                    {/*            e.target.blur();*/}
+                                    {/*        }*/}
+                                    {/*    }}*/}
+                                    {/*/>*/}
+
+                                    {/*</div>*/}
+                                </div>
+
+                                <div className="w-24 space-y-2">
+                                    <Label htmlFor="currency">Currency</Label>
+                                    <Select>
+                                        <SelectTrigger id="currency">
+                                            <SelectValue placeholder={currencies['CAD']}/>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {Object.entries(currencies).map(([code, flag]) => (
+                                                <SelectItem key={code} value={code}>{flag}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
 
                             </div>
 
@@ -273,21 +341,60 @@ export default function Component() {
                                     </DialogContent>
                                 </Dialog>
                             </div>
-                            <div className="space-y-2">
-                                <Label>Category</Label>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    className="w-full justify-start"
-                                    onClick={() => {
-                                        setIsDrawerOpen(true);
-                                        setIsCategoryDrawerOpen(true);
-                                    }
-                                    }
-                                >
-                                    {selectedExpense.category || 'Select a category'}
-                                </Button>
-                            </div>
+
+
+                            <Drawer open={isCategoryDrawerOpen} onClose={() => setIsCategoryDrawerOpen(false)}>
+                                <DrawerTrigger asChild>
+                                    <div className="space-y-2">
+                                        <Label>Category</Label>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="w-full justify-start"
+                                            onClick={() => {
+                                                setIsDrawerOpen(true);
+                                                setIsCategoryDrawerOpen(true);
+                                            }
+                                            }
+                                        >
+                                            {selectedExpense.category || 'Select a category'}
+                                        </Button>
+                                    </div>
+                                </DrawerTrigger>
+                                <DrawerContent side="bottom">
+                                    <DrawerHeader>
+                                        <DrawerTitle>Select Category</DrawerTitle>
+                                    </DrawerHeader>
+                                    <div className="p-4">
+
+                                        <Command>
+                                            <CommandInput placeholder="Search category..."/>
+                                            <CommandList>
+                                                <CommandEmpty>No category found.</CommandEmpty>
+                                                <CommandGroup>
+                                                    {categories.map((category) => (
+                                                        <CommandItem
+                                                            key={category}
+                                                            value={category}
+                                                            onSelect={handleCategoryChange}
+                                                        >
+                                                            <Check
+                                                                className={cn(
+                                                                    "mr-2 h-4 w-4",
+                                                                    selectedExpense.category === category ? "opacity-100" : "opacity-0"
+                                                                )}
+                                                            />
+                                                            {category}
+                                                        </CommandItem>
+                                                    ))}
+                                                </CommandGroup>
+                                            </CommandList>
+                                        </Command>
+                                    </div>
+                                </DrawerContent>
+                            </Drawer>
+
+
                             <div className="space-y-2">
                                 <Label htmlFor="paidBy">Paid By</Label>
                                 <Select value={selectedExpense.paidBy} onValueChange={
@@ -303,19 +410,21 @@ export default function Component() {
                                     </SelectContent>
                                 </Select>
                             </div>
-                            {/*<div className="space-y-2">*/}
-                            {/*    <Label htmlFor="splitBetween">Split Between</Label>*/}
-                            {/*    <Select value={splitBetween} onValueChange={setSplitBetween}>*/}
-                            {/*        <SelectTrigger id="splitBetween">*/}
-                            {/*            <SelectValue placeholder="Select a member"/>*/}
-                            {/*        </SelectTrigger>*/}
-                            {/*        <SelectContent>*/}
-                            {/*            {members.map((member) => (*/}
-                            {/*                <SelectItem key={member} value={member}>{member}</SelectItem>*/}
-                            {/*            ))}*/}
-                            {/*        </SelectContent>*/}
-                            {/*    </Select>*/}
-                            {/*</div>*/}
+                            <div className="space-y-2">
+                                <Label htmlFor="splitBetween">Split Between</Label>
+                                <Select value={selectedExpense.splitBetween} onValueChange={
+                                    (value) => setSelectedExpense(prev => ({...prev, splitBetween: value}))
+                                }>
+                                    <SelectTrigger id="splitBetween">
+                                        <SelectValue placeholder="Select a member"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {members.map((member) => (
+                                            <SelectItem key={member} value={member}>{member}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
 
                         <DrawerFooter>
@@ -325,9 +434,7 @@ export default function Component() {
                                 </Button>
                                 <div className="space-x-2">
                                     {isEditMode && (
-                                        <Button type="button" variant="destructive" onClick={handleDelete}>
-                                            Delete
-                                        </Button>
+                                        <HoldToDelete onConfirm={handleDelete}/>
                                     )}
                                     <Button type="submit">
                                         {isEditMode ? "Save" : "Add"} Transaction
@@ -339,38 +446,6 @@ export default function Component() {
                 </DrawerContent>
             </Drawer>
 
-            <Drawer open={isCategoryDrawerOpen} onClose={() => setIsCategoryDrawerOpen(false)}>
-                <DrawerContent>
-                    <DrawerHeader>
-                        <DrawerTitle>Select Category</DrawerTitle>
-                    </DrawerHeader>
-                    <div className="p-4">
-                        <Command>
-                            <CommandInput placeholder="Search category..."/>
-                            <CommandList>
-                                <CommandEmpty>No category found.</CommandEmpty>
-                                <CommandGroup>
-                                    {categories.map((category) => (
-                                        <CommandItem
-                                            key={category}
-                                            value={category}
-                                            onSelect={handleCategoryChange}
-                                        >
-                                            <Check
-                                                className={cn(
-                                                    "mr-2 h-4 w-4",
-                                                    selectedExpense.category === category ? "opacity-100" : "opacity-0"
-                                                )}
-                                            />
-                                            {category}
-                                        </CommandItem>
-                                    ))}
-                                </CommandGroup>
-                            </CommandList>
-                        </Command>
-                    </div>
-                </DrawerContent>
-            </Drawer>
 
             <ToolBar activeTab={activeTab} setActiveTab={setActiveTab} setIsDrawerOpen={setIsDrawerOpen}
                      setIsEditMode={setIsEditMode}/>

@@ -10,7 +10,7 @@ interface CalculatorProps {
 }
 
 export function Calculator({initialValue, onEnter}: CalculatorProps) {
-    const [input, setInput] = useState(initialValue)
+    const [input, setInput] = useState(initialValue.toString())
     const [error, setError] = useState<string | null>(null)
     const [isEvaluated, setIsEvaluated] = useState(false)
 
@@ -22,9 +22,14 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
     const evaluateExpression = (expression: string) => {
         try {
             // Replace 'x' with '*' for multiplication
-            const result = eval(expression.replace(/×/g, '*'))
+            const result = eval(expression.toString().replace(/×/g, '*'))
             if (isNaN(result) || !isFinite(result)) {
                 throw new Error("Invalid result")
+            }
+            // round to max 3 decimal places
+            // remove trailing zeroes
+            if (result % 1 !== 0) {
+                return result.toFixed(3).replace(/\.?0+$/, '')
             }
             return result.toString()
         } catch (error) {
@@ -57,7 +62,8 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
         if (value === 'Enter') {
             handleSubmit()
         } else if (value === 'Backspace') {
-            setInput(prev => prev.slice(0, -1))
+            // make sure to convert to string then remove last character
+            setInput(prev => prev.toString().slice(0, -1))
             setIsEvaluated(false)
         } else if (value === '=') {
             if (isEvaluated) {
@@ -80,7 +86,7 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault()
-            handleEvaluate()
+            handleButtonClick('=')
         }
     }
 
@@ -92,15 +98,27 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
         '(', ')', 'Enter', 'Backspace'
     ]
 
+    const buttonVariants = {
+        '/': 'secondary',
+        '×': 'secondary',
+        '-': 'secondary',
+        '+': 'secondary',
+        '=': 'secondary',
+        'Enter': 'outline',
+        'Backspace': 'destructive',
+    }
+
     return (
-        <div className="w-full max-w-md mx-auto p-4 bg-white rounded-lg">
+        <div className="w-full max-w-md mx-auto p-4 rounded-lg">
             <Input
                 type="text"
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-                className="w-full mb-4 text-right text-lg font-mono"
+                className="w-full mb-4 text-left text-lg font-mono"
                 aria-label="Calculator input"
+                inputMode='none'
+                id='calculator-input'
             />
             {error && (
                 <Alert variant="destructive" className="mb-4">
@@ -114,7 +132,7 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
                         key={btn}
                         onClick={() => handleButtonClick(btn)}
                         className="h-12"
-                        variant={['/', '×', '-', '+', '='].includes(btn) ? 'secondary' : 'default'}
+                        variant={buttonVariants[btn] || 'default'}
                         aria-label={btn}
                     >
                         {btn === 'Backspace' ? <Delete className="h-4 w-4"/> :
