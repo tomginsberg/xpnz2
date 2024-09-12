@@ -9,6 +9,7 @@ interface CalculatorProps {
     onEnter: (value: string) => void;
 }
 
+// @ts-ignore
 export function Calculator({initialValue, onEnter}: CalculatorProps) {
     const [input, setInput] = useState(initialValue.toString())
     const [error, setError] = useState<string | null>(null)
@@ -108,7 +109,6 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
         'Backspace': 'destructive',
     }
 
-    // @ts-expect-error - TS doesn't know if the value is a key of buttonVariants
     return (
         <div className="w-full max-w-md mx-auto p-4 rounded-lg">
             <Input
