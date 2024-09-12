@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import { motion } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 const tabs = [
     { id: "transactions", label: "💸" },

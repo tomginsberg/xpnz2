@@ -3,7 +3,7 @@
 import {useState, useEffect} from 'react';
 import {format} from 'date-fns';
 import Fuse from 'fuse.js';
-import {CalendarIcon, Banknote, Search} from 'lucide-react';
+import {CalendarIcon} from 'lucide-react';
 
 import {cn} from '../lib/utils';
 import DebtsTab from './debts';
@@ -16,43 +16,24 @@ import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandL
 import {Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger} from './ui/drawer';
 import {Input} from './ui/input';
 import {Label} from './ui/label';
-import {Popover, PopoverContent, PopoverTrigger} from './ui/popover';
-import {ScrollArea} from './ui/scroll-area';
 import ExpensesTab from "./expenses";
-import {Check, ChevronsUpDown} from "lucide-react"
+import {Check} from "lucide-react"
 import CalculatorInput from "./calculator-input";
 import HoldToDelete from "./delete";
 
 import {
     Select,
     SelectContent,
-    SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import {MultiSelect} from "@/components/ui/multi-select";
 
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet"
-import {SheetClose} from "./ui/sheet";
 
 
 const generateRandomExpense = () => {

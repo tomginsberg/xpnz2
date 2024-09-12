@@ -2,14 +2,9 @@ import React, {useState} from 'react'
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
-import {
-    Dialog,
-    DialogContent,
-    DialogTrigger,
-} from "@/components/ui/dialog"
 import {Calculator} from "./calculator"
 import {Banknote, Lock, Calculator as CalculatorIcon} from "lucide-react"
-import {Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger} from '@/components/ui/drawer';
+import {Drawer, DrawerContent, DrawerTrigger} from '@/components/ui/drawer';
 
 interface CalculatorInputProps {
     value: string;

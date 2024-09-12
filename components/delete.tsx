@@ -1,6 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react'
 import {Button} from "@/components/ui/button"
-import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog"
 import {Fingerprint} from 'lucide-react'
 import {motion, useAnimation} from "framer-motion"
 
@@ -16,7 +15,7 @@ interface HoldToConfirmButtonProps {
     holdText?: string
     className?: string
 }
-import {Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger} from '@/components/ui/drawer';
+import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from '@/components/ui/drawer';
 
 const HoldToConfirmButton: React.FC<HoldToConfirmButtonProps> = ({
                                                                      onConfirm,
