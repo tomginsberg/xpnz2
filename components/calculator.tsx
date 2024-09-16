@@ -6,12 +6,11 @@ import {Alert, AlertDescription} from "@/components/ui/alert"
 
 interface CalculatorProps {
     initialValue: string;
-    onEnter: (value: string) => void;
+    onEnter: (value: number) => void;
 }
 
-// @ts-ignore
 export function Calculator({initialValue, onEnter}: CalculatorProps) {
-    const [input, setInput] = useState(initialValue.toString())
+    const [input, setInput] = useState((initialValue || '').toString())
     const [error, setError] = useState<string | null>(null)
     const [isEvaluated, setIsEvaluated] = useState(false)
 
@@ -52,7 +51,7 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
     const handleSubmit = () => {
         try {
             const result = isEvaluated ? input : evaluateExpression(input)
-            onEnter(result)
+            onEnter(parseFloat(result))
         } catch (error) {
             setError("Invalid expression. Please check and try again.")
         }
@@ -63,8 +62,15 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
         if (value === 'Enter') {
             handleSubmit()
         } else if (value === 'Backspace') {
-            // make sure to convert to string then remove last character
-            setInput(prev => prev.toString().slice(0, -1))
+            setInput(prev => {
+                const inputElement = document.getElementById('calculator-input') as HTMLInputElement;
+                const cursorPosition = inputElement.selectionStart || 0;
+                const newValue = (prev || '').toString().slice(0, cursorPosition - 1) + (prev || '').toString().slice(cursorPosition);
+                setTimeout(() => {
+                    inputElement.setSelectionRange(cursorPosition - 1, cursorPosition - 1);
+                }, 0);
+                return newValue;
+            })
             setIsEvaluated(false)
         } else if (value === '=') {
             if (isEvaluated) {
@@ -73,7 +79,15 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
                 handleEvaluate()
             }
         } else {
-            setInput(prev => prev + value)
+            setInput(prev => {
+                const inputElement = document.getElementById('calculator-input') as HTMLInputElement;
+                const cursorPosition = inputElement.selectionStart || 0;
+                const newValue = (prev || '').toString().slice(0, cursorPosition) + value + (prev || '').toString().slice(cursorPosition);
+                setTimeout(() => {
+                    inputElement.setSelectionRange(cursorPosition + value.length, cursorPosition + value.length);
+                }, 0);
+                return newValue;
+            });
             setIsEvaluated(false)
         }
     }
@@ -133,6 +147,7 @@ export function Calculator({initialValue, onEnter}: CalculatorProps) {
                         key={btn}
                         onClick={() => handleButtonClick(btn)}
                         className="h-12"
+                        // @ts-expect-error error with button variant type
                         variant={buttonVariants[btn] || 'default'}
                         aria-label={btn}
                     >

@@ -7,35 +7,37 @@ import {Banknote, Lock, Calculator as CalculatorIcon} from "lucide-react"
 import {Drawer, DrawerContent, DrawerTrigger} from '@/components/ui/drawer';
 
 interface CalculatorInputProps {
-    value: string;
-    onChange: (value: string) => void;
+    value: number;
+    onChange: (value: number) => void;
     disabled?: boolean;
+    useLabel?: boolean;
+    label?: string;
 }
 
-export default function CalculatorInput({value, onChange, disabled}: CalculatorInputProps) {
+export default function CalculatorInput({value, onChange, disabled, useLabel = false, label='Amount'}: CalculatorInputProps) {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-    const handleCalculatorEnter = (value: string) => {
+    const handleCalculatorEnter = (value: number) => {
         onChange(value)
         setIsDialogOpen(false)
     }
 
     return (
         <div className="space-y-2">
-            <Label htmlFor="number-input">Amount</Label>
+            {useLabel && <Label htmlFor="number-input">{label}</Label>}
 
             <div className="relative">
                 <Banknote
                     className="size-5 absolute left-3 top-1/2 mt-[0.4px] transform -translate-y-1/2"/>
+                <div className="flex space-x-0">
 
-                <div className="flex space-x-2">
                     <Input
                         id="number-input"
-                        type="text"
+                        type="number"
                         placeholder={'0.00'}
                         value={value}
-                        onChange={(e) => onChange(e.target.value)}
-                        className="pl-10"
+                        onChange={(e) => onChange(parseFloat(e.target.value))}
+                        className="pl-10 rounded-r-none z-10"
                         disabled={disabled}
                     />
                     <Drawer open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -44,6 +46,7 @@ export default function CalculatorInput({value, onChange, disabled}: CalculatorI
                                 type="button"
                                 variant="outline"
                                 disabled={disabled}
+                                className='rounded-l-none border-l-0'
                             >
                                 {disabled ? <Lock className="h-4 w-4"/> : <CalculatorIcon className="h-4 w-4"/>}
                             </Button>

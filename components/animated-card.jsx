@@ -78,8 +78,15 @@ export default function AnimatedCard({ expense, onClick }) {
                 {showDetails && (
                     <><hr className="mx-3 mb-1 border-gray-300 dark:border-gray-700"/>
                         <div className="p-4 pt-0 text-gray-700 dark:text-gray-400">
-                            <p className="text-md">Paid: {expense.paidBy.join(", ")}</p>
-                            <p className="text-md">Split: {expense.splitBetween.join(", ")}</p>
+                            <p className="text-md">Paid: {expense.paidBy.map(
+                                (data) => data.member + " $" + data.amount.toFixed(2).replace(/\.?0+$/, '')
+                            ).join(', ')}</p>
+                            <p className="text-md">Split: {
+                                expense.splitBetween.map(
+                                    (data) => data.member + " $" + (expense.amount / data.normalizedWeight).toFixed(2).replace(/\.?0+$/, '')
+                                ).join(', ')
+
+                            }</p>
                         </div>
                     </>
                 )}

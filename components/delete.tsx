@@ -110,8 +110,8 @@ export default function HoldToDelete({onConfirm}: { onConfirm: () => void }) {
     return (
         <Drawer open={dialogOpen} onOpenChange={setDialogOpen}>
             <DrawerTrigger asChild>
-                <Button type="button" variant="destructive">
-                    Delete
+                <Button type="button" variant="outline">
+                    🗑️
                 </Button>
             </DrawerTrigger>
             <DrawerContent>
